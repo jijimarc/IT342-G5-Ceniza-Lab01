@@ -22,6 +22,8 @@ public class RegisterService {
 
         User newUser = new User();
         newUser.setUserEmail(data.getUserEmail());
+        newUser.setUserFirstname(data.getUserFirstName());
+        newUser.setUserLastname(data.getUserLastName());
         String encodedPassword = passwordEncoder.encode(data.getUserPassword());
         newUser.setUserPassword(encodedPassword);
 

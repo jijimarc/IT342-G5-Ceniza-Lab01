@@ -12,6 +12,6 @@ public class ProfileDTO {
     private String userLastname;
     private String userMiddlename;
     private LocalDate userBirthdate;
-    private String profileImage;
+    private String userProfileImage;
     private int age;
 }

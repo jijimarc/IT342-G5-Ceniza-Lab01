@@ -22,7 +22,7 @@ public class ProfileService {
         dto.setUserLastname(user.getUserLastname());
         dto.setUserMiddlename(user.getUserMiddlename());
         dto.setUserBirthdate(user.getUserBirthdate());
-        dto.setProfileImage(user.getProfileImage());
+        dto.setUserProfileImage(user.getUserProfileImage());
         dto.setAge(user.getAge());
         return dto;
     }
@@ -35,7 +35,7 @@ public class ProfileService {
         existingUser.setUserLastname(data.getUserLastname());
         existingUser.setUserMiddlename(data.getUserMiddlename());
         existingUser.setUserBirthdate(data.getUserBirthdate());
-        existingUser.setProfileImage(data.getProfileImage());
+        existingUser.setUserProfileImage(data.getUserProfileImage());
         return userRepository.save(existingUser);
     }
 

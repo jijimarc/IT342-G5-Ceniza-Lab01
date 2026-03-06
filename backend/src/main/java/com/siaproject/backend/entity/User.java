@@ -30,8 +30,10 @@ public class User {
     private boolean isAuthenticated;
     private boolean isLoggedOut;
 
+    @Enumerated(EnumType.STRING)
+    private Role userRole;
     @Column(name = "profile_image", columnDefinition = "TEXT")
-    private String profileImage;
+    private String userProfileImage;
 
     @Transient
     @Getter(AccessLevel.NONE)
