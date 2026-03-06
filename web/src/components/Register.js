@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './reusable/AuthPage.css';
+import Toast from './reusable/Toast';
 
 const Register = () => {
+  const [toast, setToast] = useState({ message: '', type: '' });
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     userEmail: '',
+    userFirstName: '',
+    userLastName: '',
     userPassword: '',
     confirmPassword: ''
   });
@@ -27,15 +31,17 @@ const Register = () => {
       });
 
       if (response.ok) {
-        alert("Registration Successful!");
-        navigate('/login');
+        setToast({ message: 'User registered successfully!', type: 'success' });
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
       } else {
         const errorData = await response.json();
-        alert("Registration failed: " + (errorData.message || "Unknown error"));
+        setToast({ message: 'Failed to register user.', type: 'error' });
       }
     } catch (error) {
       console.error("Error connecting to backend:", error);
-      alert("Cannot connect to server. Ensure backend is running.");
+      setToast({ message: 'Error occured during registration.', type: 'error' });
     }
   };
 
@@ -54,6 +60,25 @@ const Register = () => {
               <input 
                 name="userEmail"
                 type="email" 
+                className="auth-input"
+                onChange={handleChange}
+                required 
+              />
+            </div>
+            <div className="input-group">
+              <label>First Name</label>
+              <input 
+                name="userFirstName"
+                type="name" 
+                className="auth-input"
+                onChange={handleChange}
+                required 
+              />
+            </div><div className="input-group">
+              <label>Last Name</label>
+              <input 
+                name="userLastName"
+                type="name" 
                 className="auth-input"
                 onChange={handleChange}
                 required 
@@ -80,7 +105,15 @@ const Register = () => {
               />
             </div>
             <button type="submit" className="auth-btn btn-primary">Create Account</button>
+            <div className="auth-footer">
+              Already have an account? <Link to="/login" className="auth-link">Login</Link>
+            </div>
           </form>
+          <Toast 
+            message={toast.message} 
+            type={toast.type} 
+            onClose={() => setToast({ message: '', type: '' })} 
+          />
         </div>
       </div>
     </div>

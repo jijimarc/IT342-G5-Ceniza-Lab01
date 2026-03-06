@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext'; 
 import './reusable/AuthPage.css';
+import Toast from './reusable/Toast';
 
-const Login = () => {
+const Login = () => {  
+  const [toast, setToast] = useState({ message: '', type: '' });
   const navigate = useNavigate();
   const { login } = useAuth(); 
   const [userEmail, setEmail] = useState('');
@@ -14,16 +16,22 @@ const Login = () => {
     const result = await login({ userEmail, userPassword });
     
     if (result.success) {
-      navigate('/dashboard');
+      setToast({ message: 'Login success!', type: 'success' });
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
     } else {
-      alert(result.message);
+      setToast({ message: 'Login success!', type: 'success' });
     }
   };
 
   const handleGuest = (e) => {
     e.preventDefault();
     login(null, true); 
-    navigate('/dashboard');
+    setToast({ message: 'Guest login success!', type: 'success' });
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
   };
 
   return (
@@ -65,10 +73,15 @@ const Login = () => {
             <button type="button" className="auth-btn btn-guest" onClick={handleGuest}>
               Continue as Guest
             </button>
+            <div className="auth-footer">
+              Don't have an account? <Link to="/register" className="auth-link">Register</Link>
+            </div>
           </form>
-          <div className="auth-footer">
-            Don't have an account? <Link to="/register" className="auth-link">Register</Link>
-          </div>
+          <Toast 
+            message={toast.message} 
+            type={toast.type} 
+            onClose={() => setToast({ message: '', type: '' })} 
+          />
         </div>
       </div>
     </div>

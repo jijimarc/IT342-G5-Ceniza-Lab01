@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
 import { useAuth } from '../AuthContext';
 
-const Sidebar = () => {
+const Sidebar = ({ onLogout }) => {
   const { user } = useAuth();
   return (
     <aside className="sidebar">
@@ -25,7 +25,14 @@ const Sidebar = () => {
 
         <div className="nav-section-label">Services</div>
 
-        <NavLink to="/login" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+        <NavLink 
+          to="/login" 
+          className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}
+          onClick={(e) => {
+            e.preventDefault(); 
+            if (onLogout) onLogout(); 
+          }}
+        >
           <span className="nav-icon"></span>
           Logout
         </NavLink>

@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react'; 
 import Sidebar from './reusable/Sidebar'; 
 import './reusable/Dashboard.css';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext'; // 1. Import Auth Context
+import { useAuth } from './AuthContext'; 
+import Toast from './reusable/Toast';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user } = useAuth(); // 2. Get the user state
-
-  // Helper to get initials (e.g., "John Doe" -> "JD")
+  const { user, logout } = useAuth(); 
+  const [toast, setToast] = useState({ message: '', type: '' }); 
+  
   const getInitials = (name) => {
     if (!name) return "G";
     const parts = name.split(" ");
@@ -16,31 +17,32 @@ const Dashboard = () => {
     return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
   };
 
-  // Determine Display Name
   const displayName = user?.isGuest ? "Guest User" : (user?.email || "User");
-  
-  // Determine Avatar Text
   const avatarText = user?.isGuest ? "G" : getInitials(displayName);
+
+  const handleLogoutClick = () => {
+    setToast({ message: 'Logging out successfully...', type: 'info' });
+    setTimeout(() => {
+      logout(); 
+      navigate('/login'); 
+    }, 1500);
+  };
 
   return (
     <div className="dashboard-wrapper">
-      <Sidebar />
+      <Sidebar onLogout={handleLogoutClick} />
+      
       <main className="main-content">
         <header className="dashboard-header">
           <div className="header-title">
             <h2>Dashboard Overview</h2>
           </div>
           
-          {/* 3. Dynamic Profile Section */}
           <div className="profile-section">
             <button className="profile-btn" onClick={() => navigate('/profile')}>
-              
-              {/* Avatar Circle */}
               <div className={`profile-avatar ${user?.isGuest ? 'guest-avatar' : ''}`}>
                 {avatarText}
               </div>
-              
-              {/* Name Label */}
               <span>{displayName}</span>
             </button>
           </div>
@@ -57,6 +59,11 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        onClose={() => setToast({ message: '', type: '' })} 
+      />
     </div>
   );
 };
